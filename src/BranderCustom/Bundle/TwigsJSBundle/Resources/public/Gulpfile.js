@@ -22,7 +22,7 @@ var gulp = require('gulp'),
   browserSync = require('browser-sync'),
   minimatch = require("minimatch"),
   fs = require('fs'),
-  shell = require('gulp-shell'),
+  exec = require('child_process').exec,
   path = require('path');
 
 
@@ -451,21 +451,17 @@ gulp.task('bower:install', function() {
 
 //******************************************************************
 //*******************************************************
-function testPipe(output) {
-  console.log("++++" + output);
-}
-gulp.task('twigs:get:installed:bundle:names', function() {
-  return gulp.src('', {
-      read: false
-    })
-    .pipe(shell([
-        'app/console generate:twigsjs:helper',
-      ], {}
-    ))
-    .pipe('input', testPipe)
+gulp.task('twigs:get:installed:bundle:names', function (cb) {
+  exec('app/console generate:twigsjs:helper', function (err, stdout, stderr) {
+    console.log('++++++++++++++');
+    console.log("***" + stdout + "****");
+    console.log('++++++++++++++');
+    console.log(stderr);
+    console.log(err)
+    cb(err);
+  });
+});
 
-    }
-);
 
 (function(handle) {
 
