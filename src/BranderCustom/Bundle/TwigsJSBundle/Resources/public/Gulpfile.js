@@ -451,13 +451,10 @@ gulp.task('bower:install', function() {
 
 //******************************************************************
 //*******************************************************
-gulp.task('twigs:get:installed:bundle:names', function (cb) {
-  exec('app/console generate:twigsjs:helper', function (err, stdout, stderr) {
-    console.log('++++++++++++++');
-    console.log("***" + stdout + "****");
-    console.log('++++++++++++++');
-    console.log(stderr);
-    console.log(err)
+gulp.task('twigs:bundles:path', function (cb) {
+  exec('app/console custom:find:twigs', function (err, stdout, stderr) {
+    config.dependencies.twigs.bundles = JSON.parse(stdout)
+    console.log(config.dependencies.twigs.bundles);
     cb(err);
   });
 });
@@ -482,8 +479,6 @@ gulp.task('twigs:get:installed:bundle:names', function (cb) {
       return _.union(result, getPaths(__dirname + path, conf.extensions));
     }, []);
   });
-  console.log("*************")
-  console.log(conf.paths)
 
   gulp.task('dependencies:twigs:build', function() {
     var result = [];
@@ -514,16 +509,12 @@ gulp.task('twigs:get:installed:bundle:names', function (cb) {
 })(function(conf, paths, dest, base) {
   var conf = _.merge({}, conf);
   conf.options.compileOptions.id = function(file) {
-    console.log("7777777777" + file.relative)
-
     //          0  1                         2    3
     var matches = /(^app)?.*\/Resources\/views\/(.*?)([^\/]+\.twig)/.exec(file.relative);
     console.log(matches)
     var bundle = (matches[1] === "app" ? "" : matches[2])
     bundle = bundle.replace(/\/Bundle\//g, "").replace(/\//g, "");
     var path = matches[2].replace(/^\/|\/$/g, "");
-    console.log(bundle + ":" + path + ":" + matches[3])
-    console.log("7777777777" + file.relative)
 
     return dest + file.relative;
   };

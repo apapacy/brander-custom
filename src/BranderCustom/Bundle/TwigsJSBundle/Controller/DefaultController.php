@@ -18,16 +18,17 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $kernel = $this->container->get('kernel');
-        $bundles = array(); //$kernel->getBundles();
+
+        $bundles = $kernel->getBundles();
         $bunldlesNames = $this->container->getParameter('kernel.bundles');
-        foreach ($bunldlesNames as $name => $path) {
-          $bundles[] = array(
-            'name' => $name,
-            'path' => $path,
-            'absolutePath' => $kernel->locateResource('@'.$name)
+        foreach ($bundles as $bundle) {
+          $abundles[] = array(
+            'name' => $bundle->getName(),
+            'path' => $bundle->getPath(),
+            'nameSpace' => $bundle->getNamespace(),
           );
         }
-        print_r($bundles);
+        print_r($abundles);
         die();
 
         return $this->render('BranderCustomTwigsJSBundle:Default:index.html.twig');

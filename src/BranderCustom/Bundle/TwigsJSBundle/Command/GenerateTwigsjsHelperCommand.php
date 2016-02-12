@@ -13,7 +13,7 @@ class GenerateTwigsjsHelperCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('generate:twigsjs:helper')
+            ->setName('custom:find:twigs')
             ->setDescription('...')
             ->addArgument('argument', InputArgument::OPTIONAL, 'Argument description')
             ->addOption('option', null, InputOption::VALUE_NONE, 'Option description')
@@ -28,7 +28,31 @@ class GenerateTwigsjsHelperCommand extends ContainerAwareCommand
             // ...
         }
 
-        $output->writeln('Command result.');
-    }
+        $kernel = $this->getContainer()->get('kernel');
 
+        $bundles = $kernel->getBundles();
+        foreach ($bundles as $bundle) {
+            $array[] = array(
+          'name' => $bundle->getName(),
+          'path' => $bundle->getPath(),
+          'nameSpace' => $bundle->getNamespace(),
+          );
+            $name[$bundle->getName()] = array(
+            'name' => $bundle->getName(),
+            'path' => $bundle->getPath(),
+            'nameSpace' => $bundle->getNamespace(),
+          );
+            $path[$bundle->getPath()] = array(
+            'name' => $bundle->getName(),
+            'path' => $bundle->getPath(),
+            'nameSpace' => $bundle->getNamespace(),
+          );
+        }
+
+        $output->writeln(json_encode(array(
+          'array' => $array,
+          'name' => $name,
+          'path' => $path,
+        )));
+    }
 }

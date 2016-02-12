@@ -1,0 +1,7 @@
+custom_twigs_js:
+  resource: "@BranderCustomTwigsJSBundle/Controller"
+  prefix: /custom
+  type: annotation
+  options:
+    expose: true
+    i18n: false
