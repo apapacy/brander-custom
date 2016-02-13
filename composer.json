@@ -1,6 +1,6 @@
 {
-  "name": "brander-custom/twig-js",
-  "type": "symfony-bundle",
+  "name": "brander-custom",
+  "type": "library",
   "description": "helps",
   "keywords": [
   ],
@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BranderCustom\\Bundle\\TwigsJSBundle\\":  "src/BranderCustom/Bundle/TwigsJSBundle/"
+      "BranderCustom\\Bundle\\TwigsJSBundle":  ""
     }
   }
 }
