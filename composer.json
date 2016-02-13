@@ -1,5 +1,6 @@
 {
   "name": "brander-custom",
+  "type": "library",
   "description": "helps",
   "keywords": [
   ],
