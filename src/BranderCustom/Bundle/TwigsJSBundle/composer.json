@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BranderCustom\\Bundle\\TwigsJSBundle\\":  "src/BranderCustom/Bundle/TwigsJSBundle/"
+      "BranderCustom\\Bundle\\TwigsJSBundle\\":  ""
     }
   }
 }
