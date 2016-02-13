@@ -1,6 +1,6 @@
 {
-  "name": "brander-custom",
-  "type": "library",
+  "name": "brander-custom/twig-js",
+  "type": "sumfony-bundle",
   "description": "helps",
   "keywords": [
   ],
@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "BranderCustom\\":  "src/"
+      "BranderCustom\\Bundle\\TwigsJSBundle;":  ""
     }
   }
 }
