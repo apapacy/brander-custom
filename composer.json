@@ -1,6 +1,5 @@
 {
   "name": "brander-custom",
-  "type": "symfony-bundle",
   "description": "helps",
   "keywords": [
   ],
@@ -9,8 +8,8 @@
   ],
   "authors": [
     {
-      "name": "",
-      "email": ""
+      "name": "OvcharenkoAV",
+      "email": "ovcharenkoav@meta.ua"
     }
   ],
   "require": {
@@ -18,8 +17,8 @@
   "require-dev":{
   },
   "autoload": {
-    "psr-0": {
-      "BranderCustom\\": "src/"
+    "psr-4": {
+      "BranderCustom\\":  "src/"
     }
   }
 }
