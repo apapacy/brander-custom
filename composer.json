@@ -1,0 +1,25 @@
+{
+  "name": "brander-custom",
+  "type": "symfony-bundle",
+  "description": "helps",
+  "keywords": [
+  ],
+  "license": "MIT",
+  "repositories": [
+  ],
+  "authors": [
+    {
+      "name": "",
+      "email": ""
+    }
+  ],
+  "require": {
+  },
+  "require-dev":{
+  },
+  "autoload": {
+    "psr-0": {
+      "BranderCustom\\": "src/"
+    }
+  }
+}
