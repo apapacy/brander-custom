@@ -89,7 +89,7 @@ function getBase(pathBlob) {
 
 //******************************************************************
 //*******************************************************
-
+var twigs = require("./twigs.js")
 var root_path = process.cwd();
 console.log(root_path);
 
@@ -100,34 +100,50 @@ gulp.task("custom:find:twigs", function(cb) {
   });
 });
 
-function twigsHandle(path, name) {
-  var conf = config.dependencies.twigs,
+function test(test) {
+  console.log(test)
+  console.log("9999999999999999999999999")
+}
+test.on =function(){}
+test.once=function(){}
+test.emit = function(){}
+test.end = function(){}
+test.write = function(){}
+
+function twigsHandle(path, name, file) {
+  var conf = config.dependencies.twigs;
   return new Promise(function(resolve, reject) {
     var rejecting = function() {
       console.error(arguments);
       reject(arguments)
     };
-    var compileOptions = {}
-    gulp.src(paths, {
-        base: base
-      })
+    conf.compileOptions = {}
+    conf.compileOptions.id = function(file) {
+      console.log("+++++++++++++++++++++")
+      console.log(file.path);
+      conf.compileOptions.id.path = file.relative
+      return file.relative
+    }
+    console.log(path + "/Resources/views/**/*.twig")
+    gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
       .on('error', rejecting)
-      .pipe(twig_compile(conf.options))
+      .pipe(twigs())
+      .pipe(twig_compile(conf))
       .on('error', rejecting)
       .pipe(gulpif(true || conf.minify, uglify()))
       .on('error', rejecting)
       .pipe(logger('views'))
-      .pipe(gulp.dest(config.DEST_PATH + '/js/' + conf.options.compileOptions.viewPrefix + dest))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/twigs"))
       .on('error', rejecting)
       .on('end', resolve);
   });
 }
 
-gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
+gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function(file) {
   var conf = config.dependencies.twigs,
     result = [];
   _.each(conf.bundles.array, function(bundle) {
-    result.push(twigsHandle(bundle.path, bundle.name));
+    result.push(twigsHandle(bundle.path, bundle.name, file));
   });
   return Promise.all(result);
 });
