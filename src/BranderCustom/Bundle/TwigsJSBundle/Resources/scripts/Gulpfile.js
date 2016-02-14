@@ -54,44 +54,8 @@ var config = {
   DEST_PATH: './web/dependencies'
 };
 
-
-
-/**
- * @param {Array<String>} extensions
- * @param {String} path
- * @return {Array<String>}
- */
-function getPaths(path, extensions) {
-  return _.map(extensions, function(ext) {
-    return path + '/**/*.' + ext;
-  });
-}
-
-/**
- * @param {Array<String>} paths
- * @param {String} path
- * @return {boolean|String}
- */
-function matchPath(paths, path) {
-  var found;
-  return _.any(paths, function(v) {
-    found = v;
-    return minimatch(path, v);
-  }) && found;
-}
-/**
- * @param {String} pathBlob
- * @return {String}
- */
-function getBase(pathBlob) {
-  return pathBlob.replace(/\/\*\*\/\*\..*/, '');
-}
-
-//******************************************************************
-//*******************************************************
 var twigs = require("./twigs.js")
 var root_path = process.cwd();
-console.log(root_path);
 
 gulp.task("custom:find:twigs", function(cb) {
   exec(root_path + "/app/console custom:find:twigs", function(err, stdout, stderr) {
@@ -100,16 +64,6 @@ gulp.task("custom:find:twigs", function(cb) {
   });
 });
 
-function test(test) {
-  console.log(test)
-  console.log("9999999999999999999999999")
-}
-test.on =function(){}
-test.once=function(){}
-test.emit = function(){}
-test.end = function(){}
-test.write = function(){}
-
 function twigsHandle(path, name, file) {
   var conf = config.dependencies.twigs;
   return new Promise(function(resolve, reject) {
@@ -117,14 +71,6 @@ function twigsHandle(path, name, file) {
       console.error(arguments);
       reject(arguments)
     };
-    conf.compileOptions = {}
-    conf.compileOptions.id = function(file) {
-      console.log("+++++++++++++++++++++")
-      console.log(file.path);
-      conf.compileOptions.id.path = file.relative
-      return file.relative
-    }
-    console.log(path + "/Resources/views/**/*.twig")
     gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
       .on('error', rejecting)
       .pipe(twigs({name:name}))
@@ -143,9 +89,3 @@ gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function(file) {
   });
   return Promise.all(result);
 });
-
-
-
-
-//*******************************************
-//*******************************************
