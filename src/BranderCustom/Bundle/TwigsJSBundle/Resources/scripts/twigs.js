@@ -25,13 +25,16 @@ module.exports = function(options) {
 
     var template = new twig.twig({
       data: contents,
-      id: options.name + "/" + passFile.relative,
-      allowInlineIncludes: false
+      id: options.name + ":" + passFile.relative.replace(/\/([^\/]+)$/, ":$1"),
+      //id: options.name + "/" + passFile.relative.replace(/:/g, "/"),
+      allowInlineIncludes: true
     })
     passFile.contents = new Buffer(template.compile({
+      allowInlineIncludes: true,
       module: "amd",
-      twig: 'test/twig' + defines
+      twig: 'twig' + defines
     }), "utf-8")
+    passFile.path = file.path + ".js"
     console.log("{{{{{{{{{{{{{{{{{{{{{{[]}}}}}}}}}}}}}}}}}}}}}}")
     console.log(passFile.relative)
     return callback(null, passFile);
