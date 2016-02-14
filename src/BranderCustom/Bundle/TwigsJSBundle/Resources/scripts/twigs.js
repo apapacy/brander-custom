@@ -2,6 +2,7 @@ var through = require('through2');
 var gutil = require('gulp-util')
 var fs = require('fs')
 var defaults = require('defaults')
+var twig = require('twig');
 
 module.exports = function(options) {
   return through.obj(function(file, encoding, callback) {
@@ -11,11 +12,29 @@ module.exports = function(options) {
       return callback(null, file);
     }
     var passFile = file.clone();
-    passFile.base = process.cwd()
-    passFile.path = process.cwd()+"/zabor.twig"
+    //passFile.base = process.cwd()
+    //passFile.path = process.cwd()+"/zabor.twig"
+    console.log(passFile.base)
+    console.log(passFile.relative)
+    var defines = ""
+    var contents = file.contents.toString("utf-8")
+    var regexp = /{%[\s]*(include|extends|use)[\s+]["|']([^''""]+)['|"][\s]*%}/g;
+    while (matches = regexp.exec(contents)) {
+      defines = defines + '", "twigs!' + (matches[2]);
+    }
+
+    var template = new twig.twig({
+      data: contents,
+      id: options.name + "/" + passFile.relative,
+      allowInlineIncludes: false
+    })
+    passFile.contents = new Buffer(template.compile({
+      module: "amd",
+      twig: 'test/twig' + defines
+    }), "utf-8")
     console.log("{{{{{{{{{{{{{{{{{{{{{{[]}}}}}}}}}}}}}}}}}}}}}}")
     console.log(passFile.relative)
-        return callback(null, passFile);
+    return callback(null, passFile);
 
 
     if (file.isStream()) {

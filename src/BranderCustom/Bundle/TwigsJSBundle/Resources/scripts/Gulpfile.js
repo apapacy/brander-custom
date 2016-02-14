@@ -127,9 +127,9 @@ function twigsHandle(path, name, file) {
     console.log(path + "/Resources/views/**/*.twig")
     gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
       .on('error', rejecting)
-      .pipe(twigs())
+      .pipe(twigs({name:name}))
       .on('error', rejecting)
-      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/twigs"))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/twigs/" + name + ".js"))
       .on('error', rejecting)
       .on('end', resolve);
   });
