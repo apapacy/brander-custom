@@ -1,0 +1,112 @@
+{
+  "name": "brander/rt",
+  "license": "proprietary",
+  "type": "project",
+  "description": "rt",
+  "minimum-stability": "stable",
+  "repositories": [{
+    "type": "composer",
+    "url": "https://composer.werkint.com/",
+    "options": {
+      "ssl": {
+        "verify_peer": true,
+        "cafile": "app/config/composer/werkint.crt",
+        "local_cert": "app/config/composer/satis-brander.pem"
+      }
+    }
+  }, {
+    "type": "git",
+    "url": "https://github.com/apapacy/brander-custom.git"
+  }],
+  "autoload": {
+    "psr-0": {
+      "Rt\\": "src/",
+      "Illuminate": "vendor/illuminate/"
+    },
+    "files": [
+      "vendor/illuminate/support/helpers.php"
+    ]
+  },
+  "require": {
+    "symfony/symfony": "2.7.*",
+    "symfony/assetic-bundle": "*",
+    "symfony/monolog-bundle": "*",
+    "symfony/swiftmailer-bundle": "*",
+    "symfony/dom-crawler": "*",
+    "doctrine/common": "2.5.*",
+    "doctrine/data-fixtures": "*",
+    "doctrine/doctrine-bundle": "*",
+    "doctrine/doctrine-fixtures-bundle": "*",
+    "doctrine/orm": "*",
+    "stof/doctrine-extensions-bundle": "*",
+    "friendsofsymfony/jsrouting-bundle": "*",
+    "friendsofsymfony/rest-bundle": "*",
+    "incenteev/composer-parameter-handler": "*",
+    "jms/cg": "dev-master",
+    "jms/i18n-routing-bundle": "^2.0",
+    "jms/security-extra-bundle": "*",
+    "jms/serializer-bundle": "*",
+    "sensio/distribution-bundle": "*",
+    "sensio/framework-extra-bundle": "*",
+    "symfony/icu": "*",
+    "twig/extensions": "*",
+    "twig/twig": "*",
+    "fzaninotto/faker": "1.5.*@dev",
+    "yucca/prerender-bundle": "dev-master",
+    "smart-core/accelerator-cache-bundle": "^1.0",
+    "nick4fake/doctrine-behaviors": "dev-master",
+    "nick4fake/serializer": "dev-master",
+    "werkint/framework-extra-bundle": "dev-master",
+    "werkint/object-routing": "dev-master",
+    "werkint/command-bundle": "dev-master",
+    "werkint/cache-bundle": "dev-master",
+    "werkint/sprites-bundle": "dev-master",
+    "werkint/webapp-bundle": "dev-master",
+    "werkint/stats-bundle": "dev-master",
+    "odesskij/generator-bundle": "dev-master",
+    "werkint/mutex-bundle": "dev-master",
+    "werkint/frontend-mapper-bundle": "dev-master",
+    "php": ">=5.5",
+    "ext-curl": "*",
+    "ext-mysql": "*",
+    "hwi/oauth-bundle": "0.4.*@dev",
+    "friendsofsymfony/user-bundle": "dev-master",
+    "tomfun/brander-eav": "0.0.*",
+    "werkint/redis-bundle": "dev-master",
+    "nelmio/api-doc-bundle": "*",
+    "willdurand/js-translation-bundle": "*",
+    "intervention/image": "*",
+    "oneup/uploader-bundle": "~1.3",
+    "illuminate/support": "5.1.*",
+    "gedmo/doctrine-extensions": "^2.4",
+    "codesleeve/stapler": "^1.1",
+    "werkint/templating-bundle": "^0.1.0",
+    "knplabs/knp-snappy-bundle": "1.4.*",
+    "brander-custom": "dev-master"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ],
+    "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
+    ]
+  },
+  "config": {
+    "bin-dir": "app/bin"
+  },
+  "extra": {
+    "symfony-app-dir": "app",
+    "symfony-web-dir": "web",
+    "symfony-assets-install": "relative",
+    "werkint-webscript-scripts": "app/webscripts",
+    "incenteev-parameters": {
+      "file": "app/config/parameters.yml"
+    },
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    }
+  }
+}
