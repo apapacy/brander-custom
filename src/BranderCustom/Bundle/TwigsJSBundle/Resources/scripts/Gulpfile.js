@@ -128,11 +128,7 @@ function twigsHandle(path, name, file) {
     gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
       .on('error', rejecting)
       .pipe(twigs())
-      .pipe(twig_compile(conf))
       .on('error', rejecting)
-      .pipe(gulpif(true || conf.minify, uglify()))
-      .on('error', rejecting)
-      .pipe(logger('views'))
       .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/twigs"))
       .on('error', rejecting)
       .on('end', resolve);

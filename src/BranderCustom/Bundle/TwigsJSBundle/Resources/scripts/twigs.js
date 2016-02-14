@@ -5,14 +5,18 @@ var defaults = require('defaults')
 
 module.exports = function(options) {
   return through.obj(function(file, encoding, callback) {
-    console.log("{{{{{{{{{{{{{{{{{{{{{{[]}}}}}}}}}}}}}}}}}}}}}}")
-    console.log(file.contents.toString("utf-8"))
-    return callback(null, file);
 
     if (file.isNull()) {
       // nothing to do
       return callback(null, file);
     }
+    var passFile = file.clone();
+    passFile.base = process.cwd()
+    passFile.path = process.cwd()+"/zabor.twig"
+    console.log("{{{{{{{{{{{{{{{{{{{{{{[]}}}}}}}}}}}}}}}}}}}}}}")
+    console.log(passFile.relative)
+        return callback(null, passFile);
+
 
     if (file.isStream()) {
       // file.contents is a Stream - https://nodejs.org/api/stream.html
