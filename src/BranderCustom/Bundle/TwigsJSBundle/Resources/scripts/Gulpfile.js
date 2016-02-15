@@ -75,6 +75,7 @@ function twigsHandle(path, name, file) {
       .on('error', rejecting)
       .pipe(twigs({name:name}))
       .on('error', rejecting)
+      .on('end', resolve)
       .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/templates/" + name))
       .on('error', rejecting)
       .on('end', resolve);
@@ -82,6 +83,8 @@ function twigsHandle(path, name, file) {
 }
 
 gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function(file) {
+  //console.log("+++++++++++++++++++")
+  //console.log(file())
   var conf = config.dependencies.twigs,
     result = [];
   _.each(conf.bundles.array, function(bundle) {

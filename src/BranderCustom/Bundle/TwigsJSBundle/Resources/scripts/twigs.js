@@ -10,25 +10,27 @@ twig.extend(function(twig) {
 module.exports = function(options) {
   return through.obj(function(file, encoding, callback) {
     if (file.isNull()) {
-      return callback(null, file);
+      return null;//callback(null, file);
     }
-    var passFile = file.clone();
     var defines = ""
     var contents = file.contents.toString("utf-8")
-    var regexp = /{%[\s]*(include|extends|use)[\s+]["|']([^''""]+)['|"][\s]*%}/g;
+    var regexp = /{%[\s]*(include|extends|use|import|from)[\s+]["']([^'"]+)[''""][\S\s]*?%}/g;
     while (matches = regexp.exec(contents)) {
       defines = defines + '", "twigs!' + (matches[2]);
     }
+    regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'])@([^\/'"]+)([\S\s]*)([''"""][\S\s]*?%})/
+    contents = contents.replace(regexp, "$1$3Bundle$4$5");
     var template = twig.twig({
       allowInlineIncludes: true,
       data: contents,
-      id: options.name + ":" + passFile.relative.replace(/\/([^\/]+)$/, ":$1"),
+      //id: options.name + ":" + file.relative.replace(/\/([^\/]+)$/, ":$1"),
+      id: options.name + "/" + file.relative,
     })
-    passFile.contents = new Buffer(template.compile({
+    file.contents = new Buffer(template.compile({
       module: "amd",
       twig: 'twig' + defines
     }), "utf-8")
-    passFile.path = file.path + ".js"
-    return callback(null, passFile);
+    file.path = file.path + ".js"
+    return callback(null, file);
   });
 }
