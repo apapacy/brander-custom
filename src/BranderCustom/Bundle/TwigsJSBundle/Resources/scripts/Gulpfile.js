@@ -73,6 +73,7 @@ function twigsHandle(path, name, file) {
     };
     gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
       .on('error', rejecting)
+      .on('end', resolve)
       .pipe(twigs({name:name}))
       .on('error', rejecting)
       .on('end', resolve)
@@ -82,13 +83,12 @@ function twigsHandle(path, name, file) {
   });
 }
 
-gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function(file) {
-  //console.log("+++++++++++++++++++")
-  //console.log(file())
+gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
   var conf = config.dependencies.twigs,
     result = [];
   _.each(conf.bundles.array, function(bundle) {
-    result.push(twigsHandle(bundle.path, bundle.name, file));
+    result.push(twigsHandle(bundle.path, bundle.name));
   });
+  result.push(twigsHandle("app", "app"));
   return Promise.all(result);
 });

@@ -14,12 +14,24 @@ module.exports = function(options) {
     }
     var defines = ""
     var contents = file.contents.toString("utf-8")
-    var regexp = /{%[\s]*(include|extends|use|import|from)[\s+]["']([^'"]+)[''""][\S\s]*?%}/g;
+
+    var regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'])@([^\/'"]+)([\S\s]*?)(['"][\S\s]*?%})/g;
+    contents = contents.replace(regexp, "$1$3Bundle$4$5");
+
+    regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'][\S]+?):([\S]+?):([\S]+?['"][\S\s]*?%})/g;
+    contents = contents.replace(regexp, "$1/$3/$4");
+
+    regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'][\S]+?)::([\S]+?['"][\S\s]*?%})/g;
+    contents = contents.replace(regexp, "$1/$3");
+
+    regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'])::\/?([\S]+?['"][\S\s]*?%})/g;
+    contents = contents.replace(regexp, "$1app/$3");
+
+
+    regexp = /{%[\s]*(include|extends|use|import|from)[\s+]["']([^'"]+)[''""][\S\s]*?%}/g;
     while (matches = regexp.exec(contents)) {
       defines = defines + '", "twigs!' + (matches[2]);
     }
-    regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'])@([^\/'"]+)([\S\s]*)([''"""][\S\s]*?%})/
-    contents = contents.replace(regexp, "$1$3Bundle$4$5");
     var template = twig.twig({
       allowInlineIncludes: true,
       data: contents,
