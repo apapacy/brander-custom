@@ -18,10 +18,9 @@
   requirejs([
     "backbone",
     "backbone.marionette",
-    "twigs!TwigBundle/Exception/error.xml.twig",
-    "twigs!TwigBundle/Exception/error.atom.twig"
+    "twigs!BranderCustomTwigsJSBundle::test.html.twig",
   ],
-    function(Backbone, Marionette, templatexml, template) {
+    function(Backbone, Marionette, template) {
       var model = new Backbone.Model();
       model.set("status_code", "Status Code++")
       model.set("status_text", "Status Text++")
