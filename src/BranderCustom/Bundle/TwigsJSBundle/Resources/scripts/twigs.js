@@ -1,5 +1,6 @@
 var through = require('through2');
 var twig = require('twig');
+var fs = require('fs');
 // require twig 0.8.8 for twig.cache(false);
 twig.cache(false);
 
@@ -16,6 +17,9 @@ module.exports = function(options) {
     }
     if (options.path) {
       file.base = options.path
+      if (options.override && fs.existsSync(options.override + "/" + file.relative)) {
+        return; //callback(null, null);
+      }
     }
     var defines = ""
     var contents = file.contents.toString("utf-8")
@@ -30,7 +34,7 @@ module.exports = function(options) {
     contents = contents.replace(regexp, "$1/$3");
 
     regexp = /({%[\s]*(include|extends|use|import|from)[\s+]["'])::\/?([\S]+?['"][\S\s]*?%})/g;
-    contents = contents.replace(regexp, "$1app/$3");
+    contents = contents.replace(regexp, "$1$3");
 
 
     regexp = /{%[\s]*(include|extends|use|import|from)[\s+]["']([^'"]+)[''""][\S\s]*?%}/g;

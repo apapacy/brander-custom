@@ -38,7 +38,6 @@ var config = {
   dependencies: {
     twigs: {
       paths: {},
-      extensions: ['twig'],
       options: {
         module: 'amd',
         twig: 'twig',
@@ -100,14 +99,15 @@ gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
   return Promise.all(result);
 });
 
-function handleWatch(path, name) {
+function handleWatch(path, name, override) {
   return function(file) {
     gulp.src(file.path, {
         encoding: "utf-8"
       })
       .pipe(twigs({
         name: name,
-        path: path
+        path: path,
+        override: override
       }))
       .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + "/templates/" + name))
   };
@@ -127,7 +127,11 @@ gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
           bundle.path + "/Resources/views/**/*.twig"
 //          root_path + "/app/Resources/" + bundle.name + "/views/**/*.twig"
         ],
-        handleWatch(bundle.path + "/Resources/views", bundle.name)
+        handleWatch(
+          bundle.path + "/Resources/views",
+          bundle.name,
+          root_path + "/app/Resources/" + bundle.name + "/views"
+        )
       )
       //      );
 
