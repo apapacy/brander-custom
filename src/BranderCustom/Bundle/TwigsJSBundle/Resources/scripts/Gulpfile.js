@@ -114,10 +114,17 @@ function handleWatch(path, name) {
 gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
   var conf = config.dependencies.twigs;
   _.each(conf.bundles.array, function(bundle) {
+    // начинаем от gulp.src(... чтобы отслеживать новые файлы
     gulp.src(bundle.path + "/Resources/views/**/*.twig")
     .pipe(
     watch(bundle.path + "/Resources/views/**/*.twig",
       handleWatch(bundle.path, bundle.name)
     ));
   });
+  gulp.src(root_path + "/app/Resources/views/**/*.twig")
+  .pipe(
+  watch(root_path + "/app/Resources/views/**/*.twig",
+    handleWatch(root_path + "/app", "app")
+  ));
+
 });
