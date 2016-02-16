@@ -37,8 +37,7 @@ var config = {
   ENV: env,
   dependencies: {
     twigs: {
-      paths: {
-      },
+      paths: {},
       extensions: ['twig'],
       options: {
         module: 'amd',
@@ -71,17 +70,22 @@ function twigsHandle(path, name, file) {
       console.error(arguments);
       reject(arguments)
     };
-    gulp.src(path + "/Resources/views/**/*.twig", {encoding:"utf-8"})
+    gulp.src(path + "/Resources/views/**/*.twig", {
+        encoding: "utf-8"
+      })
       .on('error', rejecting)
       .on('end', resolve)
-      .pipe(twigs({name:name}))
+      .pipe(twigs({
+        name: name
+      }))
       .on('error', rejecting)
       .on('end', resolve)
-      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH +"/templates/" + name))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + "/templates/" + name))
       .on('error', rejecting)
       .on('end', resolve);
   });
 }
+
 
 gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
   var conf = config.dependencies.twigs,
@@ -91,4 +95,29 @@ gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
   });
   result.push(twigsHandle("app", "app"));
   return Promise.all(result);
+});
+
+function handleWatch(path, name) {
+  return function(file) {
+    gulp.src(file.path, {
+        encoding: "utf-8"
+      })
+      .pipe(twigs({
+        name: name,
+        path: path + "/Resources/views"
+      }))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + "/templates/" + name))
+  };
+}
+
+
+gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
+  var conf = config.dependencies.twigs;
+  _.each(conf.bundles.array, function(bundle) {
+    gulp.src(bundle.path + "/Resources/views/**/*.twig")
+    .pipe(
+    watch(bundle.path + "/Resources/views/**/*.twig",
+      handleWatch(bundle.path, bundle.name)
+    ));
+  });
 });
