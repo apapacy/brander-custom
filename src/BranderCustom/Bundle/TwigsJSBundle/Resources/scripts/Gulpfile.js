@@ -38,13 +38,7 @@ var config = {
   dependencies: {
     twigs: {
       paths: {},
-      options: {
-        module: 'amd',
-        twig: 'twig',
-        compileOptions: {
-          viewPrefix: 'views/'
-        }
-      }
+      dest: "/templates/"
     }
   },
   BOWER_JSON: './bower.json',
@@ -82,7 +76,7 @@ function twigsHandle(path, name, file) {
       }))
       .on('error', rejecting)
       .on('end', resolve)
-      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + "/templates/" + name))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + conf.dest + name))
       .on('error', rejecting)
       .on('end', resolve);
   });
@@ -100,6 +94,7 @@ gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
 });
 
 function handleWatch(path, name, override) {
+  var conf = config.dependencies.twigs;
   return function(file) {
     gulp.src(file.path, {
         encoding: "utf-8"
@@ -109,7 +104,7 @@ function handleWatch(path, name, override) {
         path: path,
         override: override
       }))
-      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + "/templates/" + name))
+      .pipe(gulp.dest(root_path + "/" + config.DEST_PATH + conf.dest + name))
   };
 }
 
