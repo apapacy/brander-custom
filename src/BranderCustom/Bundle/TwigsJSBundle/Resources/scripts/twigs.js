@@ -40,7 +40,6 @@ module.exports = function(options) {
     var template = twig.twig({
       allowInlineIncludes: true,
       data: contents,
-      //id: options.name + ":" + file.relative.replace(/\/([^\/]+)$/, ":$1"),
       id: options.name + "/" + file.relative,
     })
     file.contents = new Buffer(template.compile({
