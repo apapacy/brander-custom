@@ -56,17 +56,19 @@ gulp.task("custom:find:twigs", function(cb) {
   });
 });
 
-function twigsHandle(path, name, file) {
+function twigsHandle(path, name, override) {
   var conf = config.dependencies.twigs;
   return new Promise(function(resolve, reject) {
     var rejecting = function() {
       console.error(arguments);
       reject(arguments)
     };
-    gulp.src([
-        path + "/Resources/views/**/*.twig",
-        root_path + "/app/Resources/" + name + "/views/**/*.twig"
-      ], {
+    var paths = path + "/Resources/views/**/*.twig";
+
+    if (override) {
+      paths = root_path + "/app/Resources/" + name + "/views/**/*.twig";
+    }
+    gulp.src(paths, {
         encoding: "utf-8"
       })
       .on('error', rejecting)
@@ -83,7 +85,7 @@ function twigsHandle(path, name, file) {
 }
 
 
-gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
+gulp.task("dependencies:twigs:prepare", ["custom:find:twigs"], function() {
   var conf = config.dependencies.twigs,
     result = [];
   _.each(conf.bundles.array, function(bundle) {
@@ -92,6 +94,16 @@ gulp.task("dependencies:twigs:build", ["custom:find:twigs"], function() {
   result.push(twigsHandle("app", ""));
   return Promise.all(result);
 });
+
+gulp.task("dependencies:twigs:build", ["dependencies:twigs:prepare"], function() {
+  var conf = config.dependencies.twigs,
+    result = [];
+  _.each(conf.bundles.array, function(bundle) {
+    result.push(twigsHandle(bundle.path, bundle.name, true));
+  });
+  return Promise.all(result);
+});
+
 
 function handleWatch(path, name, override) {
   var conf = config.dependencies.twigs;
@@ -109,7 +121,7 @@ function handleWatch(path, name, override) {
 }
 
 
-gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
+gulp.task("dependencies:twigs:watch", ["dependencies:twigs:build"], function() {
   var conf = config.dependencies.twigs;
   _.each(conf.bundles.array, function(bundle) {
     // начинаем от gulp.src(... чтобы отслеживать новые файлы
@@ -120,7 +132,7 @@ gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
     //      .pipe(
     gulp.watch([
           bundle.path + "/Resources/views/**/*.twig"
-//          root_path + "/app/Resources/" + bundle.name + "/views/**/*.twig"
+          //          root_path + "/app/Resources/" + bundle.name + "/views/**/*.twig"
         ],
         handleWatch(
           bundle.path + "/Resources/views",
@@ -131,7 +143,7 @@ gulp.task("dependencies:twigs:watch", ["custom:find:twigs"], function() {
       //      );
 
     gulp.watch([
-//      bundle.path + "/Resources/views/**/*.twig",
+        //      bundle.path + "/Resources/views/**/*.twig",
         root_path + "/app/Resources/" + bundle.name + "/views/**/*.twig"
       ],
       handleWatch(root_path + "/app/Resources/" + bundle.name + "/views", bundle.name)
